@@ -79,11 +79,29 @@ func getTodoById(id string) (*todo, error){
 	return nil, errors.New("todo not found")
 }
 func main(){
+	appIDEnv, appIDExists := os.LookupEnv("APP_ID")
+	appCertEnv, appCertExists := os.LookupEnv("APP_CERTIFICATE")
+	
+	if !appIDExists || !appCertExists {
+	log.Fatal("FATAL ERROR: ENV not properly configured, check appID and appCertificate")
+	} else {
+	appID = appIDEnv
+	appCertificate = appCertEnv
+	}
+	
+	api := gin.Default()
+	
+	port := os.Getenv("PORT")
+	if port == "" {
+	port = "8080"
+	}
+
+	
 	router := gin.Default()
-	router.GET("/todos", getTodos)
-	router.GET("/todos/:id", getTodo)
-	router.PATCH("/todos/:id", toggleTodoStatus)
-	router.PATCH("/update-todo/:id", updateTodo)
-	router.POST("/todos", addTodo)
-	router.Run("localhost:9090")
+	api.GET("/todos", getTodos)
+	api.GET("/todos/:id", getTodo)
+	api.PATCH("/todos/:id", toggleTodoStatus)
+	api.PATCH("/update-todo/:id", updateTodo)
+	api.POST("/todos", addTodo)
+	api.Run(":"+port)
 }
