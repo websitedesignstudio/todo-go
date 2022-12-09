@@ -79,16 +79,6 @@ func getTodoById(id string) (*todo, error){
 	return nil, errors.New("todo not found")
 }
 func main(){
-	appIDEnv, appIDExists := os.LookupEnv("APP_ID")
-	appCertEnv, appCertExists := os.LookupEnv("APP_CERTIFICATE")
-	
-	if !appIDExists || !appCertExists {
-	log.Fatal("FATAL ERROR: ENV not properly configured, check appID and appCertificate")
-	} else {
-	appID = appIDEnv
-	appCertificate = appCertEnv
-	}
-	
 	api := gin.Default()
 	
 	port := os.Getenv("PORT")
